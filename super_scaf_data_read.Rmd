@@ -1,0 +1,21 @@
+---
+title: "super_scaf_data"
+author: "Charlotte"
+date: "4/6/2020"
+output: html_document
+---
+
+```{r libraries}
+
+library(BSgenome.Odioica.local.OSKA2016)
+library(GenomicBreaks)
+
+```
+
+
+```{r pairwise alignments}
+gr_O3_3_O <- rtracklayer::import.bed("data/O3-3f__OSKA2016.bed")
+q_O3_3_O <- GRanges(gr_O3_3_O$name)
+gr_O9_5_O <- rtracklayer::import.bed("data/O9-5f__OSKA2016.bed")
+q_O9_5_O <- GRanges(gr_O9_5_O$name)
+```
