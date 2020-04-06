@@ -1,0 +1,1 @@
+## Indicating which scaffolds are close for superscaffolding
