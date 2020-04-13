@@ -67,7 +67,7 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   start_L <- (sat_start_L[2:length(sat_start_L)] + sat_ref_close) == 2
   start_R <- (sat_start_R[2:length(sat_start_R)] + sat_ref_close) == 2
   end_L <- (sat_end_L[1:(length(sat_end_L)-1)] + sat_ref_close) == 2
-  end_R <- (sat_end_L[1:(length(sat_end_L)-1)] + sat_ref_close) == 2
+  end_R <- (sat_end_R[1:(length(sat_end_R)-1)] + sat_ref_close) == 2
   
   # which indices match up?
   #EndL - StartL
@@ -86,36 +86,57 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   }
   
   
-  # constructing vectors of matching scaffolds
+  # Construct results table
+  tab_names <- paste(rep(as.vector(seqnames(q_info)), times = 1, each = 2), c("L", "R"))
+  res_tab <- matrix(data = 0, ncol = length(tab_names), nrow = length(tab_names))
+  colnames(res_tab) <- tab_names
+  rownames(res_tab) <- tab_names
+  
+  
+  # constructing vectors of matching scaffolds & fill in table, column and row wise
   #EndL - StartL
+  if(!isEmpty(EL_SL)){
   EL_SL_el <- q_seqs[EL_SL]
   EL_SL_sl <- q_seqs[EL_SL + 1]
   EL_SL_el_tab <- paste(rep(EL_SL_el, times = 1, each = 2), c("L", "R"))
   EL_SL_sl_tab <- paste(rep(EL_SL_sl, times = 1, each = 2), c("L", "R"))
+  
+  res_tab[EL_SL_el_tab, EL_SL_sl_tab] <- res_tab[EL_SL_el_tab, EL_SL_sl_tab] + 1
+  res_tab[EL_SL_sl_tab, EL_SL_el_tab] <- res_tab[EL_SL_sl_tab, EL_SL_el_tab] + 1
+  }
   #EndL - StartR
+  if(!isEmpty(EL_SR)){
   EL_SR_el <- q_seqs[EL_SR]
   EL_SR_sr <- q_seqs[EL_SR + 1]
   EL_SR_el_tab <- paste(rep(EL_SR_el, times = 1, each = 2), c("L", "R"))
   EL_SR_sr_tab <- paste(rep(EL_SR_sr, times = 1, each = 2), c("L", "R"))
+  
+  res_tab[EL_SR_el_tab, EL_SR_sr_tab] <- res_tab[EL_SR_el_tab, EL_SR_sr_tab] + 1
+  res_tab[EL_SR_sr_tab, EL_SR_el_tab] <- res_tab[EL_SR_sr_tab, EL_SR_el_tab] + 1
+  }
   #EndR - StartL
+  if(!isEmpty(ER_SL)){
   ER_SL_er <- q_seqs[ER_SL]
   ER_SL_sl <- q_seqs[ER_SL + 1]
   ER_SL_er_tab <- paste(rep(ER_SL_er, times = 1, each = 2), c("L", "R"))
   ER_SL_sl_tab <- paste(rep(ER_SL_sl, times = 1, each = 2), c("L", "R"))
+  
+  res_tab[ER_SL_er_tab, ER_SL_sl_tab] <- res_tab[ER_SL_er_tab, ER_SL_sl_tab] + 1
+  res_tab[ER_SL_sl_tab, ER_SL_er_tab] <- res_tab[ER_SL_sl_tab, ER_SL_er_tab] + 1
+  }
   #EndR - StartR
+  if(!isEmpty(ER_SR)){
   ER_SR_er <- q_seqs[ER_SR]
   ER_SR_sr <- q_seqs[ER_SR + 1]
   ER_SR_er_tab <- paste(rep(ER_SR_er, times = 1, each = 2), c("L", "R"))
   ER_SR_sr_tab <- paste(rep(ER_SR_sr, times = 1, each = 2), c("L", "R"))
   
-  
-  # Construct results table
-  tab_names <- paste(rep(as.vector(seqnames(q_info)), times = 1, each = 2), c("L", "R"))
-  res_tab <- matrix(data = NA, ncol = length(tab_names), nrow = length(tab_names))
-  colnames(res_tab) <- tab_names
-  rownames(res_tab) <- tab_names
+  res_tab[ER_SR_er_tab, ER_SR_sr_tab] <- res_tab[ER_SR_er_tab, ER_SR_sr_tab] + 1
+  res_tab[ER_SR_sr_tab, ER_SR_er_tab] <- res_tab[ER_SR_sr_tab, ER_SR_er_tab] + 1
+  }
   
   # column and row wise
+  if(FALSE){
   res_tab[EL_SL_el_tab, EL_SL_sl_tab] <- res_tab[EL_SL_el_tab, EL_SL_sl_tab] + 1
   res_tab[EL_SL_sl_tab, EL_SL_el_tab] <- res_tab[EL_SL_sl_tab, EL_SL_el_tab] + 1
   
@@ -127,12 +148,15 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   
   res_tab[ER_SR_er_tab, ER_SR_sr_tab] <- res_tab[ER_SR_er_tab, ER_SR_sr_tab] + 1
   res_tab[ER_SR_sr_tab, ER_SR_er_tab] <- res_tab[ER_SR_sr_tab, ER_SR_er_tab] + 1
+  }
   
   # Condensed version of table
   sat_scafs <- which(res_tab!=0, arr.ind = TRUE)
   scaf_bins <- res_tab[res_tab!=0]
-  res_summary <- matrix(data = cbind(as.vector(scaf_bins[,1]), as.vector(scaf_bins[,2]), sat_scafs), nrow = 3)
+  #res_summary <- matrix(data = cbind(as.vector(scaf_bins[,1]), as.vector(scaf_bins[,2]), sat_scafs), nrow = 3)
+  res_summary <- matrix(data = cbind(rownames(res_tab[sat_scafs[,"row"]]), colnames(res_tab[sat_scafs[,"col"]]),
+                                     as.vector(scaf_bins)), ncol = 3)
   
-  return(list(res_tab), res_summary)
+  return(list(res_tab, res_summary))
 }
   

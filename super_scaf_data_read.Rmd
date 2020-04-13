@@ -28,11 +28,15 @@ t_ends <- c(6807001, 200, 402, 498, 1005, 2000, 100, 5000, 1100, 6806800, 680712
 oska_test <- GRanges(seqnames = t_seqs, IRanges(start = t_starts, end = t_ends), seqinfo = seqinfo(BSgenome.Odioica.local.OSKA2016))
 
 r_seqs <- c(rep("contig_1", 8), rep("contig_2", 5))
-r_starts <- c(5, 1507, 1716, 1967, 2076, 2682, 6671, 6821, 5, 1186, 3007, 6128, 11099)
-r_ends <- c(1007, 1706, 1917, 2056, 2582, 4671, 6771, 11820, 1086, 2987, 3128, 11079, 13089)
+#r_starts <- c(5, 1506, 1714, 1964, 2072, 2682, 6671, 6821, 5, 1186, 3007, 6128, 11099)
+#r_ends <- c(1006, 1704, 1914, 2052, 2582, 4671, 6771, 11820, 1086, 2987, 3128, 11079, 13089)
+r_starts <- c(5, 1506, 1714, 1964, 2072, 2677, 6665, 6774, 5, 1185, 3005, 6125, 11095)
+r_ends <- c(1006, 1704, 1914, 2052, 2577, 4665, 6764, 11772, 1085, 2985, 3125, 11075, 13084)
+
 O3_test <- GRanges(seqnames = r_seqs, IRanges(start = r_starts, end = r_ends))
 #r_width <- width(oska_test)
 
 test_gr_O3_3_O <- O3_test
 test_gr_O3_3_O$name <- oska_test
 ```
+
