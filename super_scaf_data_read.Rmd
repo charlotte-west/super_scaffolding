@@ -19,3 +19,20 @@ q_O3_3_O <- GRanges(gr_O3_3_O$name)
 gr_O9_5_O <- rtracklayer::import.bed("data/O9-5f__OSKA2016.bed")
 q_O9_5_O <- GRanges(gr_O9_5_O$name)
 ```
+
+
+```{r example alignment}
+t_seqs <- c("S1", "S500", "S500", "S500", "S500", "S300", "S5", "S10", "S500", "S1", "S1", "S20", "S21")
+t_starts <- c(6806000, 2, 202, 410, 500, 12, 1, 2, 20, 6805000, 6807000, 50, 11)
+t_ends <- c(6807001, 200, 402, 498, 1005, 2000, 100, 5000, 1100, 6806800, 6807120, 5000, 2000)
+oska_test <- GRanges(seqnames = t_seqs, IRanges(start = t_starts, end = t_ends), seqinfo = seqinfo(BSgenome.Odioica.local.OSKA2016))
+
+r_seqs <- c(rep("contig_1", 8), rep("contig_2", 5))
+r_starts <- c(5, 1507, 1716, 1967, 2076, 2682, 6671, 6821, 5, 1186, 3007, 6128, 11099)
+r_ends <- c(1007, 1706, 1917, 2056, 2582, 4671, 6771, 11820, 1086, 2987, 3128, 11079, 13089)
+O3_test <- GRanges(seqnames = r_seqs, IRanges(start = r_starts, end = r_ends))
+#r_width <- width(oska_test)
+
+test_gr_O3_3_O <- O3_test
+test_gr_O3_3_O$name <- oska_test
+```
