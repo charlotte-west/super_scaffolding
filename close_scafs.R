@@ -153,9 +153,8 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   # Condensed version of table
   sat_scafs <- which(res_tab!=0, arr.ind = TRUE)
   scaf_bins <- res_tab[res_tab!=0]
-  #res_summary <- matrix(data = cbind(as.vector(scaf_bins[,1]), as.vector(scaf_bins[,2]), sat_scafs), nrow = 3)
-  res_summary <- matrix(data = cbind(rownames(res_tab[sat_scafs[,"row"]]), colnames(res_tab[sat_scafs[,"col"]]),
-                                     as.vector(scaf_bins)), ncol = 3)
+  res_summary <- data.frame(data = cbind(tab_names[as.vector(sat_scafs[,"col"])], tab_names[as.vector(sat_scafs[,"row"])],
+                                     as.numeric(scaf_bins)))
   
   return(list(res_tab, res_summary))
 }
