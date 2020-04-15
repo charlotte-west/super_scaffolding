@@ -98,57 +98,44 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   if(!isEmpty(EL_SL)){
   EL_SL_el <- q_seqs[EL_SL]
   EL_SL_sl <- q_seqs[EL_SL + 1]
+  
   EL_SL_el_tab <- paste(rep(EL_SL_el, times = 1, each = 2), c("L", "R"))
   EL_SL_sl_tab <- paste(rep(EL_SL_sl, times = 1, each = 2), c("L", "R"))
   
-  res_tab[EL_SL_el_tab, EL_SL_sl_tab] <- res_tab[EL_SL_el_tab, EL_SL_sl_tab] + 1
-  res_tab[EL_SL_sl_tab, EL_SL_el_tab] <- res_tab[EL_SL_sl_tab, EL_SL_el_tab] + 1
+  res_tab[cbind(EL_SL_el_tab, EL_SL_sl_tab)] <- res_tab[cbind(EL_SL_el_tab, EL_SL_sl_tab)] + 1
   }
   #EndL - StartR
   if(!isEmpty(EL_SR)){
   EL_SR_el <- q_seqs[EL_SR]
   EL_SR_sr <- q_seqs[EL_SR + 1]
-  EL_SR_el_tab <- paste(rep(EL_SR_el, times = 1, each = 2), c("L", "R"))
-  EL_SR_sr_tab <- paste(rep(EL_SR_sr, times = 1, each = 2), c("L", "R"))
   
-  res_tab[EL_SR_el_tab, EL_SR_sr_tab] <- res_tab[EL_SR_el_tab, EL_SR_sr_tab] + 1
-  res_tab[EL_SR_sr_tab, EL_SR_el_tab] <- res_tab[EL_SR_sr_tab, EL_SR_el_tab] + 1
+  EL_SR_el_tab <- paste(EL_SR_el, "L")
+  EL_SR_sr_tab <- paste(EL_SR_sr, "R")
+  
+  res_tab[cbind(EL_SR_el_tab, EL_SR_sr_tab)] <- res_tab[cbind(EL_SR_el_tab, EL_SR_sr_tab)] + 1
   }
   #EndR - StartL
   if(!isEmpty(ER_SL)){
   ER_SL_er <- q_seqs[ER_SL]
   ER_SL_sl <- q_seqs[ER_SL + 1]
-  ER_SL_er_tab <- paste(rep(ER_SL_er, times = 1, each = 2), c("L", "R"))
-  ER_SL_sl_tab <- paste(rep(ER_SL_sl, times = 1, each = 2), c("L", "R"))
   
-  res_tab[ER_SL_er_tab, ER_SL_sl_tab] <- res_tab[ER_SL_er_tab, ER_SL_sl_tab] + 1
-  res_tab[ER_SL_sl_tab, ER_SL_er_tab] <- res_tab[ER_SL_sl_tab, ER_SL_er_tab] + 1
+  ER_SL_er_tab <- paste(ER_SL_er, "R")
+  ER_SL_sl_tab <- paste(ER_SL_sl, "L")
+  
+  res_tab[cbind(ER_SL_er_tab, ER_SL_sl_tab)] <- res_tab[cbind(ER_SL_er_tab, ER_SL_sl_tab)] + 1
+
   }
   #EndR - StartR
   if(!isEmpty(ER_SR)){
   ER_SR_er <- q_seqs[ER_SR]
   ER_SR_sr <- q_seqs[ER_SR + 1]
-  ER_SR_er_tab <- paste(rep(ER_SR_er, times = 1, each = 2), c("L", "R"))
-  ER_SR_sr_tab <- paste(rep(ER_SR_sr, times = 1, each = 2), c("L", "R"))
   
-  res_tab[ER_SR_er_tab, ER_SR_sr_tab] <- res_tab[ER_SR_er_tab, ER_SR_sr_tab] + 1
-  res_tab[ER_SR_sr_tab, ER_SR_er_tab] <- res_tab[ER_SR_sr_tab, ER_SR_er_tab] + 1
+  ER_SR_er_tab <- paste(ER_SR_er, "R")
+  ER_SR_sr_tab <- paste(ER_SR_sr, "R")
+  
+  res_tab[cbind(ER_SR_er_tab, ER_SR_sr_tab)] <- res_tab[cbind(ER_SR_er_tab, ER_SR_sr_tab)] + 1
   }
   
-  # column and row wise
-  if(FALSE){
-  res_tab[EL_SL_el_tab, EL_SL_sl_tab] <- res_tab[EL_SL_el_tab, EL_SL_sl_tab] + 1
-  res_tab[EL_SL_sl_tab, EL_SL_el_tab] <- res_tab[EL_SL_sl_tab, EL_SL_el_tab] + 1
-  
-  res_tab[EL_SR_el_tab, EL_SR_sr_tab] <- res_tab[EL_SR_el_tab, EL_SR_sr_tab] + 1
-  res_tab[EL_SR_sr_tab, EL_SR_el_tab] <- res_tab[EL_SR_sr_tab, EL_SR_el_tab] + 1
-  
-  res_tab[ER_SL_er_tab, ER_SL_sl_tab] <- res_tab[ER_SL_er_tab, ER_SL_sl_tab] + 1
-  res_tab[ER_SL_sl_tab, ER_SL_er_tab] <- res_tab[ER_SL_sl_tab, ER_SL_er_tab] + 1
-  
-  res_tab[ER_SR_er_tab, ER_SR_sr_tab] <- res_tab[ER_SR_er_tab, ER_SR_sr_tab] + 1
-  res_tab[ER_SR_sr_tab, ER_SR_er_tab] <- res_tab[ER_SR_sr_tab, ER_SR_er_tab] + 1
-  }
   
   # Condensed version of table
   sat_scafs <- which(res_tab!=0, arr.ind = TRUE)
@@ -156,6 +143,19 @@ close_scafs <- function(gr_ob, q_genome, co_tol, ref_dist_tol, edge_tol, contig_
   res_summary <- data.frame(data = cbind(tab_names[as.vector(sat_scafs[,"col"])], tab_names[as.vector(sat_scafs[,"row"])],
                                      as.numeric(scaf_bins)))
   
+  # finish filling in results table so that it is symmetric along the diagonal
+  if(!isEmpty(EL_SL)){
+    res_tab[cbind(EL_SL_sl_tab, EL_SL_el_tab)] <- res_tab[cbind(EL_SL_sl_tab, EL_SL_el_tab)] + 1
+  }
+  if(!isEmpty(EL_SR)){
+    res_tab[cbind(EL_SR_sr_tab, EL_SR_el_tab)] <- res_tab[cbind(EL_SR_sr_tab, EL_SR_el_tab)] + 1
+  }
+  if(!isEmpty(ER_SL)){
+    res_tab[cbind(ER_SL_sl_tab, ER_SL_er_tab)] <- res_tab[cbind(ER_SL_sl_tab, ER_SL_er_tab)] + 1
+  }
+  if(!isEmpty(ER_SR)){
+    res_tab[cbind(ER_SR_sr_tab, ER_SR_er_tab)] <- res_tab[cbind(ER_SR_sr_tab, ER_SR_er_tab)] + 1
+  }
   return(list(res_tab, res_summary))
 }
   
