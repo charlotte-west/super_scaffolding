@@ -1,0 +1,95 @@
+---
+title: "Close-scafs Results Data"
+output: html_document
+---
+
+```{r O3 O9 relaxed}
+res_O3_1 <- close_scafs(gr_ob = gr_O3_3_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 1000, ref_dist_tol = 1000, edge_tol = 500)
+
+res_O9_1 <- close_scafs(gr_ob = gr_O9_5_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 1000, ref_dist_tol = 1000, edge_tol = 500)
+
+res_O3_1_summary <- res_O3_1[[2]]
+res_O9_1_summary <- res_O9_1[[2]]
+
+res_O3_1_summary
+res_O9_1_summary
+```
+
+```{r O3 O9 together}
+
+res_O3_1_summary_scafs <- paste(res_O3_1_summary[,1], res_O3_1_summary[,2])
+res_O9_1_summary_scafs <- paste(res_O9_1_summary[,1], res_O9_1_summary[,2])
+
+O3_O9_1 <- match(res_O3_1_summary_scafs, res_O9_1_summary_scafs)
+O3_O9_res <- res_O9_1_summary[na.omit(O3_O9_1),]
+O3_O9_res
+
+```
+
+
+```{r O3 O9 strict}
+res_O3_2 <- close_scafs(gr_ob = gr_O3_3_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 500, ref_dist_tol = 300, edge_tol = 300)
+
+res_O9_2 <- close_scafs(gr_ob = gr_O9_5_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 500, ref_dist_tol = 300, edge_tol = 300)
+
+res_O3_2_summary <- res_O3_2[[2]]
+res_O9_2_summary <- res_O9_2[[2]]
+```
+
+```{r O3 O9 strict together}
+
+res_O3_2_summary_scafs <- paste(res_O3_2_summary[,1], res_O3_2_summary[,2])
+res_O9_2_summary_scafs <- paste(res_O9_2_summary[,1], res_O9_2_summary[,2])
+
+O3_O9_2 <- match(res_O3_2_summary_scafs, res_O9_2_summary_scafs)
+O3_O9_res2 <- res_O9_2_summary[na.omit(O3_O9_2),]
+O3_O9_res2
+
+```
+
+
+```{r}
+res_Oki_1 <- close_scafs(gr_ob = gr_Oki_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 500, ref_dist_tol = 300, edge_tol = 300)
+
+res_Nor_1 <- close_scafs(gr_ob = gr_Oki_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 500, ref_dist_tol = 300, edge_tol = 300)
+
+
+res_Oki_summary <- res_Oki_1[[2]]
+res_Nor_summary <- res_Nor_1[[2]]
+
+res_Oki_summary_scafs <- paste(res_Oki_summary[,1], res_Oki_summary[,2])
+res_Nor_summary_scafs <- paste(res_Nor_summary[,1], res_Nor_summary[,2])
+
+O3_Oki <- which(!is.na(match(res_O3_2_summary_scafs, res_Oki_summary_scafs)))
+O3_Nor <- which(!is.na(match(res_O3_2_summary_scafs, res_Nor_summary_scafs)))
+O3_O9 <- which(!is.na(O3_O9_2))
+
+all_res1 <- intersect(intersect(O3_Oki, O3_Nor), O3_O9)
+#all_res1 <- Reduce(intersect(list(O3_Oki, O3_Nor, O3_O9)))
+all_res <- res_O3_1_summary[all_res1,]
+all_res
+```
+
+
+```{r}
+res_Oki_1 <- close_scafs(gr_ob = gr_Oki_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 1000, ref_dist_tol = 1000, edge_tol = 500)
+
+res_Nor_1 <- close_scafs(gr_ob = gr_Oki_O, q_genome = BSgenome.Odioica.local.OSKA2016, co_tol = 1000, ref_dist_tol = 1000, edge_tol = 500)
+
+
+res_Oki_summary <- res_Oki_1[[2]]
+res_Nor_summary <- res_Nor_1[[2]]
+
+res_Oki_summary_scafs <- paste(res_Oki_summary[,1], res_Oki_summary[,2])
+res_Nor_summary_scafs <- paste(res_Nor_summary[,1], res_Nor_summary[,2])
+
+O3_Oki <- which(!is.na(match(res_O3_2_summary_scafs, res_Oki_summary_scafs)))
+O3_Nor <- which(!is.na(match(res_O3_2_summary_scafs, res_Nor_summary_scafs)))
+O3_O9 <- which(!is.na(O3_O9_1))
+
+all_res1 <- intersect(intersect(O3_Oki, O3_Nor), O3_O9)
+#all_res1 <- Reduce(intersect(list(O3_Oki, O3_Nor, O3_O9)))
+all_res <- res_O3_1_summary[all_res1,]
+all_res
+```
+

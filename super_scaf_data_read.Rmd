@@ -18,6 +18,10 @@ gr_O3_3_O <- rtracklayer::import.bed("data/O3-3f__OSKA2016.bed")
 q_O3_3_O <- GRanges(gr_O3_3_O$name)
 gr_O9_5_O <- rtracklayer::import.bed("data/O9-5f__OSKA2016.bed")
 q_O9_5_O <- GRanges(gr_O9_5_O$name)
+
+gr_Oki_O <- rtracklayer::import.bed("data/I69-4__OSKA2016.bed")
+
+gr_Nor_O <- rtracklayer::import.bed("data/Norway__OSKA2016.bed")
 ```
 
 
